@@ -20,9 +20,9 @@ Route::get('/', function () {
 });
 
 Route::namespace('User')->group(function () {
-    Route::get('/register', 'LoginController@show_signup_form')->name('signup');
-    Route::post('/register', 'LoginController@process_signup');
-    Route::get('/login', 'LoginController@show_login_form')->name('login');
-    Route::post('/login', 'LoginController@process_login');
-    Route::get('/logout', 'LoginController@logout')->name('logout');
+    Route::get('/login', 'LoginController@showLoginForm')->name('user.login');
+    Route::post('/login', 'LoginController@processLogin');
+    Route::get('/register', 'LoginController@showSigupForm')->name('user.signup');
+    Route::post('/register', 'LoginController@processSignup');
+    Route::get('/logout', 'LoginController@logout')->name('user.logout');
 });

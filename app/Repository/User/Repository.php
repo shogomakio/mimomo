@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\User;
 
 use App\Models\User;
 
-class UserRepository
+class Repository implements IRepository
 {
     protected $user;
 

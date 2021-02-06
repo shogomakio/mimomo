@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Service\User\IService;
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Service\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
     private $userService;
 
-    public function __construct(UserService $userService)
+    public function __construct(IService $userService)
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest')->except('user.logout');
         $this->userService = $userService;
     }
 
@@ -24,7 +24,7 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function show_login_form(): mixed
+    public function showLoginForm(): mixed
     {
         return view('user.login');
     }
@@ -32,61 +32,55 @@ class LoginController extends Controller
     /**
      * ログイン処理
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request リクエスト
+     *
      * @return mixed
      */
-    public function process_login(Request $request): mixed
+    public function processLogin(Request $request): mixed
     {
-        $request->validate([
-            'login' => 'required',
-            // TODO password length
-            'password' => 'required'
-        ]);
+        try {
+            $request->validate(
+                [
+                    'login' => 'required',
+                    // TODO password length
+                    'password' => 'required'
+                ]
+            );
 
-        $login = $request->only('login')['login'];
-        $password = $request->only('password')['password'];
+            $login = $request->only('login')['login'];
+            $password = $request->only('password')['password'];
 
-        if (empty($login)) {
-            session()->flash('message', 'invalid credentials');
-            return redirect()->back();
-        }
+            // 有効なusernameだったら、usernameログイン情報を設定
+            $user = $this->userService->searchUserByUsername($login);
+            if (!empty($user)) {
+                // TODO login with username
+                $credentials = [
+                    'username' => $login,
+                    'password' => $password
+                ];
+            }
 
-        $user = $this->userService->searchUserByUsername($login);
+            // 有効なemailだったら、emailログイン情報を設定
+            $user = $this->userService->searchUserByEmail($login);
+            if (!empty($user)) {
+                // TODO login with email
+                $credentials = [
+                    'email' => $login,
+                    'password' => $password
+                ];
+            }
 
-        if (!empty($user)) {
-            // TODO login with username
-            $credentials = [
-                'username' => $login,
-                'password' => $password
-            ];
-            // $credentials = $request->only('login', 'password');
-            // $credentials = $request->except(['_token']);
             if (Auth::attempt($credentials)) {
                 return \redirect()->route('/');
             }
+
+            session()->flash('message', 'invalid credentials');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            session()->flash('message', 'invalid credentials');
+            return redirect()->back();
         }
-
-        $user = $this->userService->searchUserByEmail($login);
-
-        if (!empty($user)) {
-            // TODO login with email
-            // $credentials = [
-            //     'email' => $login,
-            //     'password' => $password
-            // ];
-            $credentials = $request->only('login', 'password');
-            // $credentials = $request->except(['_token']);
-            // if (Auth::attempt($credentials)) {
-            if (auth()->attempt($credentials)) {
-                return \redirect()->route('/');
-            }
-        }
-
-        $user = User::where('username', $request->username)->first();
-
-
-        session()->flash('message', 'invalid credentials');
-        return redirect()->back();
     }
 
     /**
@@ -94,7 +88,7 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function show_signup_form(): mixed
+    public function showSignupForm(): mixed
     {
         return view('user.signup');
     }
@@ -102,18 +96,20 @@ class LoginController extends Controller
     /**
      * ユーザ登録処理
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request リクエスト
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function process_signup(Request $request): RedirectResponse
+    public function processSignup(Request $request): RedirectResponse
     {
-        $request->validate([
-            'username' => 'required',
-            'email' => 'required',
-            'password' => 'required'
-        ]);
+        $request->validate(
+            [
+                'username' => 'required',
+                'email' => 'required',
+                'password' => 'required'
+            ]
+        );
 
-        // TODO : email authentication
         $isCreated = $this->userService->createUser(
             $request->input('firstName'),
             $request->input('LastName'),
@@ -124,11 +120,11 @@ class LoginController extends Controller
 
         if ($isCreated) {
             session()->flash('message', 'Your account was created successfully.');
-            return redirect()->route('login');
+            return redirect()->route('user.login');
         }
 
         session()->flash('message', "There was an error. Your account couldn't be created.");
-        return redirect()->route('signup');
+        return redirect()->route('user.signup');
     }
 
     /**
@@ -139,6 +135,6 @@ class LoginController extends Controller
     public function logout(): RedirectResponse
     {
         \Auth::logout();
-        return redirect()->route('login');
+        return redirect()->route('user.login');
     }
 }

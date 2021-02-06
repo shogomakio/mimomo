@@ -1,4 +1,4 @@
-<form method="post" action="{{ route('login') }}">
+<form method="post" action="{{ route('user.login') }}">
     @csrf
   <div class="form-group">
     <label>Login</label>
@@ -13,5 +13,5 @@
     <button type="submit" class="btn btn-primary btn-block enter-btn">Login</button>
   </div>
 
-  <p class="sign-up">Don't have an Account?<a href="{{ route('signup') }}"> Sign Up</a></p>
+  <p class="sign-up">Don't have an Account?<a href="{{ route('user.signup') }}"> Sign Up</a></p>
 </form>
