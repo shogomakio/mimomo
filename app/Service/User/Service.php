@@ -48,7 +48,7 @@ class Service implements IService
      * @param string $email
      * @param string $password
      *
-     * @return boolean
+     * @return \App\Models\User|null
      */
     public function createUser(
         string $firstName,
@@ -56,7 +56,7 @@ class Service implements IService
         string $username,
         string $email,
         string $password
-    ): bool {
+    ): \App\Models\User|null {
         $user = new User();
         $user->first_name = $firstName;
         $user->last_name = $lastName;

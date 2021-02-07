@@ -31,7 +31,7 @@ interface IService
      * @param string $email
      * @param string $password
      *
-     * @return boolean
+     * @return \App\Models\User|null
      */
     public function createUser(
         string $firstName,
@@ -39,5 +39,5 @@ interface IService
         string $username,
         string $email,
         string $password
-    ): bool;
+    ): \App\Models\User|null;
 }

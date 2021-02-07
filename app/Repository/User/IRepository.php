@@ -11,9 +11,9 @@ interface IRepository
      * ユーザ新規作成
      *
      * @param \App\Models\User $user
-     * @return boolean
+     * @return \App\Models\User|null
      */
-    public function create(User $user): bool;
+    public function create(User $user): \App\Models\User|null;
 
     /**
      * ユーザ検索・username指定

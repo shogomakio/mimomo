@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Service\User\IService;
+use App\Validation\User\LoginValidation;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
+    use LoginValidation;
+
     private $userService;
 
     public function __construct(IService $userService)
@@ -39,39 +42,37 @@ class LoginController extends Controller
     public function processLogin(Request $request): mixed
     {
         try {
-            $request->validate(
-                [
-                    'login' => 'required',
-                    // TODO password length
-                    'password' => 'required'
-                ]
-            );
+            $this->validateLoginData($request->all());
 
             $login = $request->only('login')['login'];
             $password = $request->only('password')['password'];
 
-            // 有効なusernameだったら、usernameログイン情報を設定
+            // usernameでログイン
             $user = $this->userService->searchUserByUsername($login);
-            if (!empty($user)) {
-                // TODO login with username
+            if (is_null($user) === false && \boolval($user->email_verified)) {
+                // 有効なusernameだったら、ログイン実行
                 $credentials = [
                     'username' => $login,
                     'password' => $password
                 ];
+
+                if (Auth::attempt($credentials)) {
+                    return \redirect()->route('/');
+                }
             }
 
-            // 有効なemailだったら、emailログイン情報を設定
+            // emailでログイン
             $user = $this->userService->searchUserByEmail($login);
-            if (!empty($user)) {
-                // TODO login with email
+            if (is_null($user) === false && \boolval($user->email_verified)) {
+                // 有効なemailだったら、ログイン実行
                 $credentials = [
                     'email' => $login,
                     'password' => $password
                 ];
-            }
 
-            if (Auth::attempt($credentials)) {
-                return \redirect()->route('/');
+                if (Auth::attempt($credentials)) {
+                    return \redirect()->route('/');
+                }
             }
 
             session()->flash('message', 'invalid credentials');
@@ -81,50 +82,6 @@ class LoginController extends Controller
             session()->flash('message', 'invalid credentials');
             return redirect()->back();
         }
-    }
-
-    /**
-     * ユーザ登録画面表示
-     *
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
-     */
-    public function showSignupForm(): mixed
-    {
-        return view('user.signup');
-    }
-
-    /**
-     * ユーザ登録処理
-     *
-     * @param \Illuminate\Http\Request $request リクエスト
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function processSignup(Request $request): RedirectResponse
-    {
-        $request->validate(
-            [
-                'username' => 'required',
-                'email' => 'required',
-                'password' => 'required'
-            ]
-        );
-
-        $isCreated = $this->userService->createUser(
-            $request->input('firstName'),
-            $request->input('LastName'),
-            $request->input('username'),
-            $request->input('email'),
-            $request->input('password')
-        );
-
-        if ($isCreated) {
-            session()->flash('message', 'Your account was created successfully.');
-            return redirect()->route('user.login');
-        }
-
-        session()->flash('message', "There was an error. Your account couldn't be created.");
-        return redirect()->route('user.signup');
     }
 
     /**

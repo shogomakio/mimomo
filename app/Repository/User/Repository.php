@@ -3,6 +3,7 @@
 namespace App\Repository\User;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 
 class Repository implements IRepository
 {
@@ -17,18 +18,18 @@ class Repository implements IRepository
      * ユーザ新規作成
      *
      * @param \App\Models\User $user
-     * @return boolean
+     * @return \App\Models\User|null
      */
-    public function create(User $user): bool
+    public function create(User $user): \App\Models\User|null
     {
-        $user = $this->user::create([
+        return $this->user::create([
             'first_name' => trim($user->first_name),
             'last_name' => trim($user->last_name),
             'username' => trim($user->username),
             'email' => strtolower($user->email),
             'password' => bcrypt($user->password),
+            'email_verification_token' => Str::random(32),
         ]);
-        return !empty($user);
     }
 
     /**
