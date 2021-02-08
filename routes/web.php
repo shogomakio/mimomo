@@ -22,7 +22,7 @@ Route::get('/', function () {
 Route::namespace('User')->group(function () {
     Route::get('/register', 'RegisterController@showSignupForm')->name('user.signup');
     Route::post('/register', 'RegisterController@processSignup');
-    Route::get('/verify/{token}', 'RegisterController@verifyEmail')->name('user.verifyEmail');
+    Route::get('/verify/{token}', 'VerifyEmailController@verifyEmail')->name('user.verifyEmail');
     Route::get('/login', 'LoginController@showLoginForm')->name('user.login');
     Route::post('/login', 'LoginController@processLogin');
     Route::get('/logout', 'LoginController@logout')->name('user.logout');

@@ -3,6 +3,7 @@
 namespace App\Repository\User;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 
 class Repository implements IRepository
@@ -18,6 +19,7 @@ class Repository implements IRepository
      * ユーザ新規作成
      *
      * @param \App\Models\User $user
+     *
      * @return \App\Models\User|null
      */
     public function create(User $user): \App\Models\User|null
@@ -36,7 +38,8 @@ class Repository implements IRepository
      * ユーザ検索・username指定
      *
      * @param string $username
-     * @return User|null
+     *
+     * @return \App\Models\User|null
      */
     public function searchUserByUsername(string $username): \App\Models\User|null
     {
@@ -47,10 +50,39 @@ class Repository implements IRepository
      *  ユーザ検索・email指定
      *
      * @param string $email
+     *
      * @return \App\Models\User|null
      */
     public function searchUserByEmail(string $email): \App\Models\User|null
     {
         return $this->user::where('email', $email)->first();
+    }
+
+    /**
+     * ユーザ取得・メールトークン指定
+     *
+     * @param string $token
+     *
+     * @return \App\Models\User|null
+     */
+    public function searchUserByEmailToken(string $token): \App\Models\User|null
+    {
+        return $this->user::where('email_verification_token', $token)->first();
+    }
+
+    /**
+     * メール確認
+     *
+     * @param integer $id
+     *
+     * @return integer
+     */
+    public function verifyEmail(int $id): int
+    {
+        return $this->user::where('id', $id)->update([
+            'email_verified' => 1,
+            'email_verified_at' => Carbon::now(),
+            'email_verification_token' => ''
+        ]);
     }
 }

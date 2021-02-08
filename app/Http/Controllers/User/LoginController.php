@@ -29,7 +29,7 @@ class LoginController extends Controller
      */
     public function showLoginForm(): mixed
     {
-        return view('user.login');
+        return view('user.authentication.login');
     }
 
     /**
@@ -42,7 +42,7 @@ class LoginController extends Controller
     public function processLogin(Request $request): mixed
     {
         try {
-            $this->validateLoginData($request->all());
+            $this->validateLoginData($request->except('_token'));
 
             $login = $request->only('login')['login'];
             $password = $request->only('password')['password'];
@@ -53,7 +53,8 @@ class LoginController extends Controller
                 // 有効なusernameだったら、ログイン実行
                 $credentials = [
                     'username' => $login,
-                    'password' => $password
+                    'password' => $password,
+                    'email_verified' => 1
                 ];
 
                 if (Auth::attempt($credentials)) {
@@ -67,7 +68,8 @@ class LoginController extends Controller
                 // 有効なemailだったら、ログイン実行
                 $credentials = [
                     'email' => $login,
-                    'password' => $password
+                    'password' => $password,
+                    'email_verified' => 1
                 ];
 
                 if (Auth::attempt($credentials)) {
@@ -76,10 +78,12 @@ class LoginController extends Controller
             }
 
             session()->flash('message', 'invalid credentials');
+            session()->flash('type', 'danger');
             return redirect()->back();
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             session()->flash('message', 'invalid credentials');
+            session()->flash('type', 'danger');
             return redirect()->back();
         }
     }
@@ -92,6 +96,6 @@ class LoginController extends Controller
     public function logout(): RedirectResponse
     {
         \Auth::logout();
-        return redirect()->route('user.login');
+        return redirect()->route('user.authentication.login');
     }
 }

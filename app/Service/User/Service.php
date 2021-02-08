@@ -16,30 +16,6 @@ class Service implements IService
     }
 
     /**
-     * ユーザ取得・Username指定
-     *
-     * @param string $username
-     *
-     * @return \App\Models\User|null
-     */
-    public function searchUserByUsername(string $username): User|null
-    {
-        return $this->userRepository->searchUserByUsername($username);
-    }
-
-    /**
-     * ユーザ取得・email指定
-     *
-     * @param string $email
-     *
-     * @return \App\Models\User|null
-     */
-    public function searchUserByEmail(string $email): User|null
-    {
-        return $this->userRepository->searchUserByEmail($email);
-    }
-
-    /**
      * ユーザ新規登録
      *
      * @param string $firstName
@@ -66,5 +42,52 @@ class Service implements IService
         return $this->userRepository->create($user);
     }
 
-    // public function validate()
+    /**
+     * ユーザ取得・Username指定
+     *
+     * @param string $username
+     *
+     * @return \App\Models\User|null
+     */
+    public function searchUserByUsername(string $username): User|null
+    {
+        return $this->userRepository->searchUserByUsername($username);
+    }
+
+    /**
+     * ユーザ取得・email指定
+     *
+     * @param string $email
+     *
+     * @return \App\Models\User|null
+     */
+    public function searchUserByEmail(string $email): User|null
+    {
+        return $this->userRepository->searchUserByEmail($email);
+    }
+
+    /**
+     * ユーザ取得・メールトークン指定
+     *
+     * @param string $token
+     *
+     * @return void
+     */
+    public function searchUserByEmailToken(string $token): \App\Models\User|null
+    {
+        return $this->userRepository->searchUserByEmailToken($token);
+    }
+
+    /**
+     * メール確認
+     *
+     * @param integer $id
+     *
+     * @return boolean
+     */
+    public function verifyEmail(int $id): bool
+    {
+        $result = $this->userRepository->verifyEmail($id);
+        return $result > 0;
+    }
 }

@@ -8,17 +8,17 @@ use Illuminate\Support\Facades\Validator;
 trait LoginValidation
 {
     /**
-     * ユーザログイン情報のバリデーション
+     * ログイン情報のバリデーション
      *
      * @param array $data
      *
      * @return RedirectResponse|Validator
      */
-    public function validateLoginData(array $data): RedirectResponse|Validator
+    public function validateLoginData(array $data)
     {
         $validator = Validator::make($data, [
             'login' => 'required',
-            'password' => 'required|min:8|confirmed',
+            'password' => 'required|min:8',
         ]);
 
         if ($validator->fails()) {

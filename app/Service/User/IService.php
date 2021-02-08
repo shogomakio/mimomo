@@ -5,6 +5,25 @@ namespace App\Service\User;
 interface IService
 {
     /**
+     * ユーザ新規登録
+     *
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $username
+     * @param string $email
+     * @param string $password
+     *
+     * @return \App\Models\User|null
+     */
+    public function createUser(
+        string $firstName,
+        string $lastName,
+        string $username,
+        string $email,
+        string $password
+    ): \App\Models\User|null;
+
+    /**
      * ユーザ取得・Username指定
      *
      * @param string $username
@@ -23,21 +42,20 @@ interface IService
     public function searchUserByEmail(string $email): \App\Models\User|null;
 
     /**
-     * ユーザ新規登録
+     * ユーザ取得・メールトークン指定
      *
-     * @param string $firstName
-     * @param string $lastName
-     * @param string $username
-     * @param string $email
-     * @param string $password
+     * @param string $token
      *
      * @return \App\Models\User|null
      */
-    public function createUser(
-        string $firstName,
-        string $lastName,
-        string $username,
-        string $email,
-        string $password
-    ): \App\Models\User|null;
+    public function searchUserByEmailToken(string $token): \App\Models\User|null;
+
+    /**
+     * メール確認
+     *
+     * @param integer $id
+     *
+     * @return boolean
+     */
+    public function verifyEmail(int $id): bool;
 }

@@ -52,15 +52,18 @@ class RegisterController extends Controller
 
         if (is_null($user)) {
             session()->flash('message', "There was an error. Your account couldn't be created.");
+            session()->flash('type', 'danger');
             return redirect()->route('user.signup');
         }
 
         // TODO make sure the email is sent correctly
+        // \Mail::to('makio.shogo@gmail.com')->send(new VerificationEmail($user));
         \Mail::to($user->email)->send(new VerificationEmail($user));
         session()->flash(
             'message',
             'Your account was created successfully. Please check your email to activate your account.'
         );
+        session()->flash('type', 'success');
         return redirect()->back();
     }
 }
