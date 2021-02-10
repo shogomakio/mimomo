@@ -18,7 +18,7 @@ class LoginController extends Controller
 
     public function __construct(IService $userService)
     {
-        $this->middleware('guest')->except('user.logout');
+        $this->middleware('guest')->except('logout');
         $this->userService = $userService;
     }
 
@@ -96,6 +96,6 @@ class LoginController extends Controller
     public function logout(): RedirectResponse
     {
         \Auth::logout();
-        return redirect()->route('user.authentication.login');
+        return redirect()->route('user.login');
     }
 }

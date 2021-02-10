@@ -17,6 +17,7 @@ class RegisterController extends Controller
 
     public function __construct(IService $userService)
     {
+        $this->middleware('guest');
         $this->userService = $userService;
     }
 
