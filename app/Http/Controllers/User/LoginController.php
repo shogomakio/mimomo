@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Enums\EmailVerificationType;
 use App\Http\Controllers\Controller;
 use App\Service\User\IService;
 use App\Validation\User\LoginValidation;
@@ -50,7 +51,7 @@ class LoginController extends Controller
                 $credentials = [
                     'username' => $login,
                     'password' => $password,
-                    'email_verified' => 1
+                    'email_verified' => EmailVerificationType::VERIFIED
                 ];
 
                 if (Auth::attempt($credentials)) {
@@ -65,7 +66,7 @@ class LoginController extends Controller
                 $credentials = [
                     'email' => $login,
                     'password' => $password,
-                    'email_verified' => 1
+                    'email_verified' => EmailVerificationType::VERIFIED
                 ];
 
                 if (Auth::attempt($credentials)) {
