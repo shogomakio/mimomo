@@ -2,7 +2,6 @@
 
 namespace App\Validation\User;
 
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
 
 trait LoginValidation
@@ -10,20 +9,16 @@ trait LoginValidation
     /**
      * ログイン情報のバリデーション
      *
-     * @param array $data
+     * @param array $input
      *
-     * @return RedirectResponse|Validator
+     * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validateLoginData(array $data)
+    public function validateLoginData(array $input): \Illuminate\Contracts\Validation\Validator
     {
-        $validator = Validator::make($data, [
+        $validator = Validator::make($input, [
             'login' => 'required',
-            'password' => 'required|min:8',
+            'password' => 'required',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         return $validator;
     }
