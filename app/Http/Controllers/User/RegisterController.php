@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Mail\User\VerificationEmail;
 use App\Service\User\IService;
 use App\Validation\User\RegisterValidation;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class RegisterController extends Controller
@@ -17,15 +16,15 @@ class RegisterController extends Controller
 
     public function __construct(IService $userService)
     {
+        $this->middleware('guest');
         $this->userService = $userService;
     }
 
     /**
      * ユーザ登録画面表示
      *
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function showSignupForm(): mixed
+    public function showSignupForm()
     {
         return view('user.authentication.signup');
     }
@@ -34,20 +33,21 @@ class RegisterController extends Controller
      * ユーザ登録処理
      *
      * @param \Illuminate\Http\Request $request リクエスト
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function processSignup(Request $request): RedirectResponse
+    public function processSignup(Request $request)
     {
-        $this->validateRegisterData($request);
-        // $this->validateRegisterData($request->all());
+        $validator = $this->validateRegisterData($request->all());
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         $user = $this->userService->createUser(
-            $request->input('firstName'),
-            $request->input('lastName'),
-            $request->input('username'),
-            $request->input('email'),
-            $request->input('password')
+            firstName: $request->input('firstName'),
+            lastName: $request->input('lastName'),
+            username: $request->input('username'),
+            email: $request->input('email'),
+            password: $request->input('password')
         );
 
         if (is_null($user)) {
@@ -56,8 +56,6 @@ class RegisterController extends Controller
             return redirect()->route('user.signup');
         }
 
-        // TODO make sure the email is sent correctly
-        // \Mail::to('makio.shogo@gmail.com')->send(new VerificationEmail($user));
         \Mail::to($user->email)->send(new VerificationEmail($user));
         session()->flash(
             'message',

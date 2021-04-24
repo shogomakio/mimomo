@@ -1,14 +1,5 @@
 <div class="card-header">{{ __('Register') }}</div>
 
-@if ($errors->any())
-<div class="alert alert-success">
-    <ul>
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
 @if(session()->has('message'))
 <div class="alert alert-success">
     <li>{{ session('message') }}</li>
@@ -23,7 +14,7 @@
             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('First Name') }}</label>
 
             <div class="col-md-6">
-                <input id="firstName" type="text" class="form-control @error('FirstName') is-invalid @enderror" name="firstName"
+                <input id="firstName" type="text" class="form-control @error('firstName') is-invalid @enderror" name="firstName"
                     value="{{ old('firstName') }}" required autocomplete="firstName" autofocus>
 
                 @error('firstName')
@@ -41,7 +32,7 @@
                 <input id="lastName" type="text" class="form-control @error('lastName') is-invalid @enderror" name="lastName"
                     value="{{ old('lastName') }}" required autocomplete="lastName" autofocus>
 
-                @error('LastName')
+                @error('lastName')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
@@ -95,12 +86,12 @@
         </div>
 
         <div class="form-group row">
-            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password')
+            <label for="password_confirmation" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password')
                 }}</label>
 
             <div class="col-md-6">
-                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required
-                    autocomplete="new-password">
+                <input id="password_confirmation" type="password" class="form-control @error('passwordConfirm') is-invalid @enderror"
+                    name="password_confirmation" required autocomplete="new-password">
             </div>
         </div>
 

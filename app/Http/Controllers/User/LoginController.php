@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Enums\EmailVerificationType;
 use App\Http\Controllers\Controller;
 use App\Service\User\IService;
 use App\Validation\User\LoginValidation;
@@ -18,16 +19,14 @@ class LoginController extends Controller
 
     public function __construct(IService $userService)
     {
-        $this->middleware('guest')->except('user.logout');
+        $this->middleware('guest')->except('logout');
         $this->userService = $userService;
     }
 
     /**
      * ログイン画面表示
-     *
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function showLoginForm(): mixed
+    public function showLoginForm()
     {
         return view('user.authentication.login');
     }
@@ -36,10 +35,8 @@ class LoginController extends Controller
      * ログイン処理
      *
      * @param \Illuminate\Http\Request $request リクエスト
-     *
-     * @return mixed
      */
-    public function processLogin(Request $request): mixed
+    public function processLogin(Request $request)
     {
         try {
             $this->validateLoginData($request->except('_token'));
@@ -54,7 +51,7 @@ class LoginController extends Controller
                 $credentials = [
                     'username' => $login,
                     'password' => $password,
-                    'email_verified' => 1
+                    'email_verified' => EmailVerificationType::VERIFIED
                 ];
 
                 if (Auth::attempt($credentials)) {
@@ -69,7 +66,7 @@ class LoginController extends Controller
                 $credentials = [
                     'email' => $login,
                     'password' => $password,
-                    'email_verified' => 1
+                    'email_verified' => EmailVerificationType::VERIFIED
                 ];
 
                 if (Auth::attempt($credentials)) {
@@ -90,12 +87,10 @@ class LoginController extends Controller
 
     /**
      * ログアウト処理
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function logout(): RedirectResponse
+    public function logout()
     {
         \Auth::logout();
-        return redirect()->route('user.authentication.login');
+        return redirect()->route('user.login');
     }
 }

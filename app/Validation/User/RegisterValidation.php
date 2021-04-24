@@ -2,40 +2,27 @@
 
 namespace App\Validation\User;
 
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
 
 trait RegisterValidation
 {
     /**
      * ユーザ登録情報のバリデーション
      *
-     * @param array $data
+     * @param array $input
      *
-     * @return RedirectResponse|Validator
+     * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validateRegisterData(Request $request): void
+    public function validateRegisterData(array $input): \Illuminate\Contracts\Validation\Validator
     {
-        // $validator = Validator::make($data, [
-        //     'firstName' => 'required',
-        //     'lastName' => 'required',
-        //     'username' => 'required',
-        //     'email' => 'required',
-        //     'password' => 'required|min:8|confirmed'
-        // ]);
+        $validator = Validator::make($input, [
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'username' => 'required|unique:users,deleted_at,null',
+            'email' => 'required|email|unique:users,deleted_at,null',
+            'password' => 'required|min:8|confirmed'
+        ]);
 
-        // if ($validator->fails()) {
-        //     return redirect()->back()->withErrors($validator)->withInput();
-        // }
-        $request->validate(
-            [
-                'firstName' => 'required',
-                'lastName' => 'required',
-                'username' => 'required',
-                'email' => 'required',
-                'password' => 'required|min:8|confirmed'
-            ]
-        );
+        return $validator;
     }
 }

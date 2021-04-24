@@ -13,7 +13,7 @@ interface IService
      * @param string $email
      * @param string $password
      *
-     * @return \App\Models\User|null
+     * @return User|null
      */
     public function createUser(
         string $firstName,
@@ -21,7 +21,7 @@ interface IService
         string $username,
         string $email,
         string $password
-    ): \App\Models\User|null;
+    ): ?\App\Models\User;
 
     /**
      * ユーザ取得・Username指定
@@ -30,7 +30,7 @@ interface IService
      *
      * @return \App\Models\User|null
      */
-    public function searchUserByUsername(string $username): \App\Models\User|null;
+    public function searchUserByUsername(string $username): ?\App\Models\User;
 
     /**
      * ユーザ取得・email指定
@@ -39,7 +39,7 @@ interface IService
      *
      * @return \App\Models\User|null
      */
-    public function searchUserByEmail(string $email): \App\Models\User|null;
+    public function searchUserByEmail(string $email): ?\App\Models\User;
 
     /**
      * ユーザ取得・メールトークン指定
@@ -48,7 +48,7 @@ interface IService
      *
      * @return \App\Models\User|null
      */
-    public function searchUserByEmailToken(string $token): \App\Models\User|null;
+    public function searchUserByEmailToken(string $token): ?\App\Models\User;
 
     /**
      * メール確認

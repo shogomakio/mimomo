@@ -10,19 +10,30 @@ interface IRepository
     /**
      * ユーザ新規作成
      *
-     * @param \App\Models\User $user
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $username
+     * @param string $email
+     * @param string $password
      *
-     * @return \App\Models\User|null
+     * @return User|null
      */
-    public function create(User $user): \App\Models\User|null;
+    public function create(
+        string $firstName,
+        string $lastName,
+        string $username,
+        string $email,
+        string $password
+    ): ?User;
 
     /**
      * ユーザ検索・username指定
      *
      * @param string $username
+     *
      * @return User|null
      */
-    public function searchUserByUsername(string $username): \App\Models\User|null;
+    public function searchUserByUsername(string $username): User|null;
 
     /**
      *  ユーザ検索・email指定

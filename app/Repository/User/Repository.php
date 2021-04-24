@@ -18,20 +18,32 @@ class Repository implements IRepository
     /**
      * ユーザ新規作成
      *
-     * @param \App\Models\User $user
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $username
+     * @param string $email
+     * @param string $password
      *
-     * @return \App\Models\User|null
+     * @return boolean
      */
-    public function create(User $user): \App\Models\User|null
-    {
-        return $this->user::create([
-            'first_name' => trim($user->first_name),
-            'last_name' => trim($user->last_name),
-            'username' => trim($user->username),
-            'email' => strtolower($user->email),
-            'password' => bcrypt($user->password),
-            'email_verification_token' => Str::random(32),
-        ]);
+    public function create(
+        string $firstName,
+        string $lastName,
+        string $username,
+        string $email,
+        string $password
+    ): ?User {
+        $this->user->first_name = $firstName;
+        $this->user->last_name = $lastName;
+        $this->user->username = $username;
+        $this->user->email = $email;
+        $this->user->password = $password;
+        $this->user->email_verification_token = Str::random(32);
+        $is_saved = $this->user->save();
+        if ($is_saved) {
+            return $this->user;
+        }
+        return null;
     }
 
     /**
@@ -39,9 +51,9 @@ class Repository implements IRepository
      *
      * @param string $username
      *
-     * @return \App\Models\User|null
+     * @return User|null
      */
-    public function searchUserByUsername(string $username): \App\Models\User|null
+    public function searchUserByUsername(string $username): User|null
     {
         return $this->user::where('username', $username)->first();
     }
@@ -51,9 +63,9 @@ class Repository implements IRepository
      *
      * @param string $email
      *
-     * @return \App\Models\User|null
+     * @return User|null
      */
-    public function searchUserByEmail(string $email): \App\Models\User|null
+    public function searchUserByEmail(string $email): User|null
     {
         return $this->user::where('email', $email)->first();
     }
@@ -63,9 +75,9 @@ class Repository implements IRepository
      *
      * @param string $token
      *
-     * @return \App\Models\User|null
+     * @return User|null
      */
-    public function searchUserByEmailToken(string $token): \App\Models\User|null
+    public function searchUserByEmailToken(string $token): User|null
     {
         return $this->user::where('email_verification_token', $token)->first();
     }

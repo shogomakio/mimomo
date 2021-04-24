@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\EmailVerificationType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,14 +22,14 @@ class CreateUsersTable extends Migration
                 ->comment('苗字（姓）');
             $table->string('username')->unique();
             $table->string('email')->unique();
-            $table->tinyInteger('email_verified')->default(0);
+            $table->tinyInteger('email_verified')->default(EmailVerificationType::NOT_VERIFIED);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('email_verification_token');
             $table->string('profile_picture')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->softDeletes('deleted_at')->nullable();
+            $table->softDeletes('deleted_at');
         });
     }
 
