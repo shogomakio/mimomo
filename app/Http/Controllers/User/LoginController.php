@@ -24,10 +24,8 @@ class LoginController extends Controller
 
     /**
      * ログイン画面表示
-     *
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function showLoginForm(): mixed
+    public function showLoginForm()
     {
         return view('user.authentication.login');
     }
@@ -36,10 +34,8 @@ class LoginController extends Controller
      * ログイン処理
      *
      * @param \Illuminate\Http\Request $request リクエスト
-     *
-     * @return mixed
      */
-    public function processLogin(Request $request): mixed
+    public function processLogin(Request $request)
     {
         try {
             $this->validateLoginData($request->except('_token'));
@@ -90,10 +86,8 @@ class LoginController extends Controller
 
     /**
      * ログアウト処理
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function logout(): RedirectResponse
+    public function logout()
     {
         \Auth::logout();
         return redirect()->route('user.login');

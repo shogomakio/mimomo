@@ -24,7 +24,7 @@ class Service implements IService
      * @param string $email
      * @param string $password
      *
-     * @return \App\Models\User|null
+     * @return User|null
      */
     public function createUser(
         string $firstName,
@@ -32,14 +32,14 @@ class Service implements IService
         string $username,
         string $email,
         string $password
-    ): \App\Models\User|null {
-        $user = new User();
-        $user->first_name = $firstName;
-        $user->last_name = $lastName;
-        $user->username = $username;
-        $user->email = $email;
-        $user->password = $password;
-        return $this->userRepository->create($user);
+    ): ?User {
+        return $this->userRepository->create(
+            firstName: $firstName,
+            lastName: $lastName,
+            username: $username,
+            email: $email,
+            password: $password,
+        );
     }
 
     /**
@@ -49,7 +49,7 @@ class Service implements IService
      *
      * @return \App\Models\User|null
      */
-    public function searchUserByUsername(string $username): User|null
+    public function searchUserByUsername(string $username): ?User
     {
         return $this->userRepository->searchUserByUsername($username);
     }
@@ -61,7 +61,7 @@ class Service implements IService
      *
      * @return \App\Models\User|null
      */
-    public function searchUserByEmail(string $email): User|null
+    public function searchUserByEmail(string $email): ?User
     {
         return $this->userRepository->searchUserByEmail($email);
     }
@@ -73,7 +73,7 @@ class Service implements IService
      *
      * @return void
      */
-    public function searchUserByEmailToken(string $token): \App\Models\User|null
+    public function searchUserByEmailToken(string $token): ?User
     {
         return $this->userRepository->searchUserByEmailToken($token);
     }
