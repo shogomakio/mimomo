@@ -28,4 +28,6 @@ Route::namespace('User')->group(function () {
     Route::get('/login', 'LoginController@showLoginForm')->name('user.login');
     Route::post('/login', 'LoginController@processLogin');
     Route::post('/logout', 'LoginController@logout')->name('user.logout');
+    Route::get('/delete', 'DeleteController@showDeleteInformation')->name('user.delete');
+    Route::post('/delete', 'DeleteController@processDelete')->name('user.processDelete');
 });

@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Service\User\IService;
 use App\Validation\User\LoginValidation;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -45,7 +44,7 @@ class LoginController extends Controller
             $password = $request->only('password')['password'];
 
             // usernameでログイン
-            $user = $this->userService->searchUserByUsername($login);
+            $user = $this->userService->searchByUsername($login);
             if (is_null($user) === false && \boolval($user->email_verified)) {
                 // 有効なusernameだったら、ログイン実行
                 $credentials = [
@@ -60,7 +59,7 @@ class LoginController extends Controller
             }
 
             // emailでログイン
-            $user = $this->userService->searchUserByEmail($login);
+            $user = $this->userService->searchByEmail($login);
             if (is_null($user) === false && \boolval($user->email_verified)) {
                 // 有効なemailだったら、ログイン実行
                 $credentials = [
@@ -73,7 +72,6 @@ class LoginController extends Controller
                     return \redirect()->route('/');
                 }
             }
-
             session()->flash('message', 'invalid credentials');
             session()->flash('type', 'danger');
             return redirect()->back();

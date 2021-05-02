@@ -4,7 +4,6 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Service\User\IService;
-use Illuminate\Http\Request;
 
 class VerifyEmailController extends Controller
 {
@@ -19,15 +18,15 @@ class VerifyEmailController extends Controller
 
     public function verifyEmail(string $token = null)
     {
-        if ($token == null) {
+        if (\is_null($token)) {
             session()->flash('message', 'Invalid Login attempt');
             session()->flash('type', 'danger');
             return redirect()->route('user.login');
         }
 
-        $user = $this->userService->searchUserByEmailToken($token);
+        $user = $this->userService->searchByEmailToken($token);
 
-        if ($user == null) {
+        if (\is_null($user)) {
             session()->flash('message', 'Invalid Login attempt');
             session()->flash('type', 'danger');
             return redirect()->route('user.login');

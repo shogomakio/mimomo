@@ -2,21 +2,21 @@
 
 namespace App\Repository\User;
 
-use App\Models\User;
+use App\Enums\EmailVerificationType;
+use App\Models\IUser;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 
 class Repository implements IRepository
 {
     protected $user;
 
-    public function __construct(User $user)
+    public function __construct(IUser $user)
     {
         $this->user = $user;
     }
 
     /**
-     * ユーザ新規作成
+     * ユーザ Model 情報を設定
      *
      * @param string $firstName
      * @param string $lastName
@@ -24,38 +24,51 @@ class Repository implements IRepository
      * @param string $email
      * @param string $password
      *
-     * @return boolean
+     * @return void
      */
-    public function create(
+    public function setUser(
         string $firstName,
         string $lastName,
         string $username,
         string $email,
         string $password
-    ): ?User {
+    ): void {
         $this->user->first_name = $firstName;
         $this->user->last_name = $lastName;
         $this->user->username = $username;
         $this->user->email = $email;
         $this->user->password = $password;
-        $this->user->email_verification_token = Str::random(32);
-        $is_saved = $this->user->save();
-        if ($is_saved) {
-            return $this->user;
-        }
-        return null;
+        $this->user->setEmailVerificationTokenAttribute();
     }
 
     /**
-     * ユーザ検索・username指定
+     * ユーザ新規作成
      *
-     * @param string $username
-     *
-     * @return User|null
+     * @return \App\Models\IUser|null
      */
-    public function searchUserByUsername(string $username): User|null
+    public function create(): ?IUser
     {
-        return $this->user::where('username', $username)->first();
+        try {
+            $isNewUserCreated = $this->user->save();
+            if ($isNewUserCreated === true) {
+                return $this->user;
+            }
+            return null;
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+    }
+
+    /**
+     * ユーザ検索・IUsername指定
+     *
+     * @param string $IUsername
+     *
+     * @return IUser|null
+     */
+    public function searchByUsername(string $IUsername): IUser|null
+    {
+        return $this->user::where('username', $IUsername)->first();
     }
 
     /**
@@ -63,9 +76,9 @@ class Repository implements IRepository
      *
      * @param string $email
      *
-     * @return User|null
+     * @return IUser|null
      */
-    public function searchUserByEmail(string $email): User|null
+    public function searchByEmail(string $email): IUser|null
     {
         return $this->user::where('email', $email)->first();
     }
@@ -75,9 +88,9 @@ class Repository implements IRepository
      *
      * @param string $token
      *
-     * @return User|null
+     * @return IUser|null
      */
-    public function searchUserByEmailToken(string $token): User|null
+    public function searchByEmailToken(string $token): IUser|null
     {
         return $this->user::where('email_verification_token', $token)->first();
     }
@@ -92,7 +105,7 @@ class Repository implements IRepository
     public function verifyEmail(int $id): int
     {
         return $this->user::where('id', $id)->update([
-            'email_verified' => 1,
+            'email_verified' => EmailVerificationType::VERIFIED,
             'email_verified_at' => Carbon::now(),
             'email_verification_token' => ''
         ]);

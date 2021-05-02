@@ -2,7 +2,7 @@
 
 namespace App\Service\User;
 
-use App\Models\User;
+use App\Models\IUser;
 use App\Repository\User\IRepository;
 use App\Service\User\IService;
 
@@ -16,7 +16,7 @@ class Service implements IService
     }
 
     /**
-     * ユーザ新規登録
+     * ユーザ model を設定
      *
      * @param string $firstName
      * @param string $lastName
@@ -24,16 +24,16 @@ class Service implements IService
      * @param string $email
      * @param string $password
      *
-     * @return User|null
+     * @return void
      */
-    public function createUser(
+    public function setUser(
         string $firstName,
         string $lastName,
         string $username,
         string $email,
         string $password
-    ): ?User {
-        return $this->userRepository->create(
+    ): void {
+        $this->userRepository->setUser(
             firstName: $firstName,
             lastName: $lastName,
             username: $username,
@@ -43,15 +43,26 @@ class Service implements IService
     }
 
     /**
+     * ユーザ新規登録
+     *
+     * @return IUser|null
+     */
+    public function create(): IUser
+    {
+        $newUser = $this->userRepository->create();
+        return $newUser;
+    }
+
+    /**
      * ユーザ取得・Username指定
      *
      * @param string $username
      *
-     * @return \App\Models\User|null
+     * @return IUser|null
      */
-    public function searchUserByUsername(string $username): ?User
+    public function searchByUsername(string $username): ?IUser
     {
-        return $this->userRepository->searchUserByUsername($username);
+        return $this->userRepository->searchByUsername($username);
     }
 
     /**
@@ -59,11 +70,11 @@ class Service implements IService
      *
      * @param string $email
      *
-     * @return \App\Models\User|null
+     * @return IUser|null
      */
-    public function searchUserByEmail(string $email): ?User
+    public function searchByEmail(string $email): ?IUser
     {
-        return $this->userRepository->searchUserByEmail($email);
+        return $this->userRepository->searchByEmail($email);
     }
 
     /**
@@ -73,9 +84,9 @@ class Service implements IService
      *
      * @return void
      */
-    public function searchUserByEmailToken(string $token): ?User
+    public function searchByEmailToken(string $token): ?IUser
     {
-        return $this->userRepository->searchUserByEmailToken($token);
+        return $this->userRepository->searchByEmailToken($token);
     }
 
     /**

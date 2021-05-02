@@ -7,12 +7,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
-class User extends Authenticatable
+class User extends Authenticatable implements IUser
 {
     use HasFactory, Notifiable, SoftDeletes;
 
     public $timestamps = true;
+
+    public const ID = 'id';
+    public const FIRST_NAME = 'first_name';
+    public const LAST_NAME = 'last_name';
+    public const USERNAME = 'username';
+    public const EMAIL = 'email';
+    public const EMAIL_VERIFIED = 'email_verified';
+    public const EMAIL_VERIFIED_AT = 'email_verified_at';
+    public const EMAIL_VERIFICATION_TOKEN = 'email_verification_token';
+    public const PROFILE_PICTURE = 'profile_picture';
+    public const PASSWORD = 'password';
+    public const REMEMBER_TOKEN = 'remember_token';
 
     /**
      * The attributes that are mass assignable.
@@ -20,15 +33,15 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name',
-        'last_name',
-        'username',
-        'email',
-        'email_verified',
-        'email_verified_at',
-        'email_verification_token',
-        'profile_picture',
-        'password',
+        self::FIRST_NAME,
+        self::LAST_NAME,
+        self::USERNAME,
+        self::EMAIL,
+        self::EMAIL_VERIFIED,
+        self::EMAIL_VERIFIED_AT,
+        self::EMAIL_VERIFICATION_TOKEN,
+        self::PROFILE_PICTURE,
+        self::PASSWORD,
     ];
 
     /**
@@ -37,8 +50,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        self::PASSWORD,
+        self::REMEMBER_TOKEN,
     ];
 
     /**
@@ -47,8 +60,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified' => 'boolean',
-        'email_verified_at' => 'datetime',
+        self::EMAIL_VERIFIED => 'boolean',
+        self::EMAIL_VERIFIED_AT => 'datetime',
     ];
 
     /**
@@ -60,7 +73,7 @@ class User extends Authenticatable
      */
     public function setFirstNameAttribute(string $value): void
     {
-        $this->attributes['first_name'] = \trim($value);
+        $this->attributes[self::FIRST_NAME] = \trim($value);
     }
 
     /**
@@ -72,7 +85,7 @@ class User extends Authenticatable
      */
     public function setLastNameAttribute(string $value): void
     {
-        $this->attributes['last_name'] = \trim($value);
+        $this->attributes[self::LAST_NAME] = \trim($value);
     }
 
     /**
@@ -84,7 +97,7 @@ class User extends Authenticatable
      */
     public function setUsernameAttribute(string $value): void
     {
-        $this->attributes['username'] = \trim($value);
+        $this->attributes[self::USERNAME] = \trim($value);
     }
 
     /**
@@ -96,7 +109,7 @@ class User extends Authenticatable
      */
     public function setEmailAttribute(string $value): void
     {
-        $this->attributes['email'] = \strtolower($value);
+        $this->attributes[self::EMAIL] = \strtolower($value);
     }
 
     /**
@@ -108,6 +121,18 @@ class User extends Authenticatable
      */
     public function setPasswordAttribute(string $value): void
     {
-        $this->attributes['password'] = \bcrypt($value);
+        $this->attributes[self::PASSWORD] = \bcrypt($value);
+    }
+
+    /**
+     * Mutator for User's Email Verification Token
+     *
+     * @param integer $token_length
+     *
+     * @return void
+     */
+    public function setEmailVerificationTokenAttribute(int $token_length = 32): void
+    {
+        $this->attributes[self::EMAIL_VERIFICATION_TOKEN] = Str::random($token_length);
     }
 }
