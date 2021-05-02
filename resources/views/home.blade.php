@@ -439,7 +439,7 @@
                             <div class="ml-4 text-lg leading-7 font-semibold"><a href="https://laravel.com/docs"
                                     class="underline text-gray-900 dark:text-white">Documentation</a></div>
                             <li class="nav-item menu-items">
-                                <a class="nav-link href=" {{ route('user.logout') }}"
+                                <a class="underline text-gray-900 dark:text-white nav-link href=" {{ route('user.logout') }}"
                                     onclick="event.preventDefault(); document.getElementById('frm-logout').submit();">
                                     <span class="menu-icon">
                                         <i class="mdi mdi-speedometer"></i>
@@ -450,6 +450,14 @@
                                     style="display: none;">
                                     {{ csrf_field() }}
                                 </form>
+                            </li>
+                            <li class="nav-item menu-items">
+                                <a class="underline text-gray-900 dark:text-white nav-link" href="{{ route('user.delete') }}">
+                                    <span class="menu-icon">
+                                        <i class="mdi mdi-speedometer"></i>
+                                    </span>
+                                    <span class="menu-title">Delete account</span>
+                                </a>
                             </li>
                         </div>
 

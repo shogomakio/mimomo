@@ -20,16 +20,20 @@ class CreateUsersTable extends Migration
                 ->comment('名前（名）');
             $table->string('last_name')
                 ->comment('苗字（姓）');
-            $table->string('username')->unique();
-            $table->string('email')->unique();
+            $table->string('username');
+            $table->string('email');
             $table->tinyInteger('email_verified')->default(EmailVerificationType::NOT_VERIFIED);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('email_verification_token');
             $table->string('profile_picture')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->boolean('exist')->nullable()->storedAs('case when deleted_at is null then 1 else null end');
             $table->timestamps();
             $table->softDeletes('deleted_at');
+
+            // 複合ユニーク制約
+            $table->unique(['username', 'email', 'exist']);
         });
     }
 
