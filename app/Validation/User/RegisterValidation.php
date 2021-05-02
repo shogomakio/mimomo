@@ -18,7 +18,7 @@ trait RegisterValidation
         $validator = Validator::make($input, [
             'firstName' => 'required',
             'lastName' => 'required',
-            'username' => 'required|unique:users,deleted_at,null',
+            'username' => 'required|min:5|unique:users,deleted_at,null',
             'email' => 'required|email|unique:users,deleted_at,null',
             'password' => 'required|min:8|confirmed'
         ]);

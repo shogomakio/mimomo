@@ -2,10 +2,29 @@
 
 namespace App\Repository\User;
 
-use App\Models\User;
+use App\Models\IUser;
 
 interface IRepository
 {
+
+    /**
+     * ユーザ Model 情報を設定
+     *
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $username
+     * @param string $email
+     * @param string $password
+     *
+     * @return void
+     */
+    public function setUser(
+        string $firstName,
+        string $lastName,
+        string $username,
+        string $email,
+        string $password
+    ): void;
 
     /**
      * ユーザ新規作成
@@ -16,42 +35,36 @@ interface IRepository
      * @param string $email
      * @param string $password
      *
-     * @return User|null
+     * @return IUser|null
      */
-    public function create(
-        string $firstName,
-        string $lastName,
-        string $username,
-        string $email,
-        string $password
-    ): ?User;
+    public function create(): ?IUser;
 
     /**
      * ユーザ検索・username指定
      *
      * @param string $username
      *
-     * @return User|null
+     * @return IUser|null
      */
-    public function searchUserByUsername(string $username): User|null;
+    public function searchByUsername(string $username): ?IUser;
 
     /**
      *  ユーザ検索・email指定
      *
      * @param string $email
      *
-     * @return \App\Models\User|null
+     * @return IUser|null
      */
-    public function searchUserByEmail(string $email): \App\Models\User|null;
+    public function searchByEmail(string $email): ?IUser;
 
     /**
      * ユーザ取得・メールトークン指定
      *
      * @param string $token
      *
-     * @return \App\Models\User|null
+     * @return IUser|null
      */
-    public function searchUserByEmailToken(string $token): \App\Models\User|null;
+    public function searchByEmailToken(string $token): ?IUser;
 
     /**
      * メール確認

@@ -42,13 +42,15 @@ class RegisterController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $user = $this->userService->createUser(
+        $this->userService->setUser(
             firstName: $request->input('firstName'),
             lastName: $request->input('lastName'),
             username: $request->input('username'),
             email: $request->input('email'),
             password: $request->input('password')
         );
+
+        $user = $this->userService->create();
 
         if (is_null($user)) {
             session()->flash('message', "There was an error. Your account couldn't be created.");
