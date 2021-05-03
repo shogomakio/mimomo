@@ -49,13 +49,15 @@ class Repository implements IRepository
     public function create(): ?IUser
     {
         try {
+            throw new \Exception("Error Processing Request", 1);
+
             $isNewUserCreated = $this->user->save();
             if ($isNewUserCreated === true) {
                 return $this->user;
             }
             return null;
         } catch (\Exception $e) {
-            //throw $th;
+            \Log::error($e->getMessage());
         }
     }
 

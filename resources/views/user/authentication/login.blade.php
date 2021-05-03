@@ -1,58 +1,59 @@
-<div class="card-header">{{ __('Login') }}</div>
+@extends('layouts.master')
+@section('title', 'Mimomo - ログインページ')
+@section('content')
+<div class="flex-center position-ref full-height">
 
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-            @error('message')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-        </ul>
+    <div class="flex-center position-absolute full-height">
+
+        <div class="content">
+            <form method="POST" action="{{ route('user.login') }}">
+                @csrf
+                <h1>Login</h1>
+
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                        @error('message')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </ul>
+                </div>
+                @endif
+
+                <div class="form-input mt-4">
+                    <label>Email</label>
+                    <input id="login" type="login" class="form-control @error('login') is-invalid @enderror"
+                        name="login" value="{{ old('login') }}" required autocomplete="login">
+
+                    @error('login')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+
+                <div class="form-input">
+                    <label>Password</label>
+                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
+                        name="password" required autocomplete="new-password">
+
+                    @error('password')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-sm mt-4"> {{ __('Login') }} <i
+                        class="fas fa-paper-plane"></i></button>
+            </form>
+        </div>
     </div>
-@endif
-
-<div class="card-body">
-    <form method="POST" action="{{ route('user.login') }}">
-        @csrf
-
-        <div class="form-group row">
-            <label for="login" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-            <div class="col-md-6">
-                <input id="login" type="login" class="form-control @error('login') is-invalid @enderror" name="login" value="{{ old('login') }}" required autocomplete="login">
-
-                @error('login')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-            <div class="col-md-6">
-                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-
-                @error('password')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-        </div>
-
-        <div class="form-group row mb-0">
-            <div class="col-md-6 offset-md-4">
-                <button type="submit" class="btn btn-primary">
-                    {{ __('Login') }}
-                </button>
-            </div>
-        </div>
-    </form>
 </div>
+<!-- / Page Content -->
+@endsection

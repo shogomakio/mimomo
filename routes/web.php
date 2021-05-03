@@ -19,15 +19,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/home', 'HomeController@index');
+Route::get('/home', 'HomeController@index')->name('home');
 
 Route::namespace('User')->group(function () {
     Route::get('/register', 'RegisterController@showSignupForm')->name('user.signup');
     Route::post('/register', 'RegisterController@processSignup');
     Route::get('/verify/{token}', 'VerifyEmailController@verifyEmail')->name('user.verifyEmail');
-    Route::get('/login', 'LoginController@showLoginForm')->name('user.login');
-    Route::post('/login', 'LoginController@processLogin');
-    Route::post('/logout', 'LoginController@logout')->name('user.logout');
+    Route::post('/login', 'LoginController@login')->name('user.login');
+    Route::get('/logout', 'LoginController@logout')->name('user.logout');
     Route::get('/delete', 'DeleteController@showDeleteInformation')->name('user.delete');
     Route::post('/delete', 'DeleteController@processDelete')->name('user.processDelete');
 });
