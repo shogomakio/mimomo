@@ -24,7 +24,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::namespace('User')->group(function () {
     Route::get('/register', 'RegisterController@index')->name('user.signup.index');
     Route::post('/register', 'RegisterController@signup')->name('user.signup');
-    Route::get('/verify/{token}', 'VerifyEmailController@verifyEmail')->name('user.verifyEmail');
+    Route::get('/verify/{token}', 'VerifyEmailController@verify')->name('user.email.verify');
     Route::get('/login', 'LoginController@index')->name('user.index');
     Route::post('/login', 'LoginController@login')->name('user.login');
     Route::get('/logout', 'LoginController@logout')->name('user.logout');

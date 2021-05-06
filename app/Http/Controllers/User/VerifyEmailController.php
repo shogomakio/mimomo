@@ -16,7 +16,7 @@ class VerifyEmailController extends Controller
         $this->userService = $userService;
     }
 
-    public function verifyEmail(string $token = null)
+    public function verify(string $token = null)
     {
         if (\is_null($token)) {
             session()->flash('message', 'Invalid Login attempt');

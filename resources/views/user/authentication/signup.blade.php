@@ -166,6 +166,9 @@
             <label class="form-check-label"><input type="checkbox" required="required"> I accept the <a href="#">Terms
                     of Use</a> &amp; <a href="#">Privacy Policy</a></label>
         </div> -->
+        @if(Session::has('message'))
+        <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+        @endif
         <div class="form-group">
             <button type="submit" class="btn btn-success btn-lg btn-block">Register Now</button>
         </div>

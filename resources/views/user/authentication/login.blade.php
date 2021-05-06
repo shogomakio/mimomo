@@ -137,9 +137,6 @@
                     @if(Session::has('message'))
                     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
                     @endif
-                    @if(Session::has('loginErrorMessage'))
-                    <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('loginErrorMessage') }}</p>
-                    @endif
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-lg btn-block login-btn">Login</button>
                     </div>

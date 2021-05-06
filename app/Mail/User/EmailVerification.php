@@ -2,13 +2,12 @@
 
 namespace App\Mail\User;
 
-use App\Models\User;
+use App\Models\IUser;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class VerificationEmail extends Mailable
+class EmailVerification extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -19,7 +18,7 @@ class VerificationEmail extends Mailable
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(IUser $user)
     {
         $this->user = $user;
     }

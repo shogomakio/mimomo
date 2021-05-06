@@ -69,12 +69,12 @@ class LoginController extends Controller
                     return \redirect()->route('/');
                 }
             }
-            session()->flash('loginErrorMessage', 'invalid credentials');
+            session()->flash('message', 'invalid credentials');
             session()->flash('alert-class', 'alert-danger');
             return redirect()->back()->withInput();
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            session()->flash('loginErrorMessage', 'invalid credentials');
+            session()->flash('message', 'invalid credentials');
             session()->flash('alert-class', 'alert-danger');
             return redirect()->back()->withInput();
         }

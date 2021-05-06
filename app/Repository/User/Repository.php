@@ -50,7 +50,7 @@ class Repository implements IRepository
     {
         try {
             $isNewUserCreated = $this->user->save();
-            if ($isNewUserCreated === true) {
+            if (isset($isNewUserCreated) && empty($isNewUserCreated) === false) {
                 return $this->user;
             }
             return null;
