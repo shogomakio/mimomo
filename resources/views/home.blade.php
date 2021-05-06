@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Mimomo - ログインページ')
+@section('title', 'Mimomo - Home')
 @section('content')
 <div class="flex-center position-ref full-height">
 

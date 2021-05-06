@@ -33,7 +33,7 @@
                     <!-- <a class="nav-link" href="{{ route('user.login') }}"><i class="fas fa-sign-in-alt"></i> Login</a> -->
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('user.signup') }}"><i class="fa fa-user-plus"
+                    <a class="nav-link" href="{{ route('user.signup.index') }}"><i class="fa fa-user-plus"
                             aria-hidden="true"></i> Register</a>
                 </li>
                 @endif
@@ -77,11 +77,11 @@
                     </div>
                     <div class="form-group">
 						<i class="fa fa-lock"></i>
-						<input id="password" type="password" name="password" class="form-control"
+						<input id="loginPassword" type="password" name="loginPassword" class="form-control"
                             placeholder="Password" required>
 					</div>
-                    @if(Session::has('message'))
-                    <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+                    @if(Session::has('loginErrorMessage'))
+                    <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('loginErrorMessage') }}</p>
                     @endif
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-lg btn-block login-btn">Login</button>
@@ -94,6 +94,7 @@
         </div>
     </div>
 </div>
+@section('style')
 <style>
     body {
         font-family: 'Varela Round', sans-serif;

@@ -24,7 +24,7 @@ class RegisterController extends Controller
      * ユーザ登録画面表示
      *
      */
-    public function showSignupForm()
+    public function index()
     {
         return view('user.authentication.signup');
     }
@@ -34,7 +34,7 @@ class RegisterController extends Controller
      *
      * @param \Illuminate\Http\Request $request リクエスト
      */
-    public function processSignup(Request $request)
+    public function signup(Request $request)
     {
         $validator = $this->validateRegisterData($request->all());
 
@@ -64,6 +64,6 @@ class RegisterController extends Controller
             'Your account was created successfully. Please check your email to activate your account.'
         );
         session()->flash('type', 'success');
-        return redirect()->back();
+        return redirect()->route('user.index');
     }
 }

@@ -22,6 +22,11 @@ class LoginController extends Controller
         $this->userService = $userService;
     }
 
+    public function index()
+    {
+        return view('user.authentication.login');
+    }
+
     /**
      * ログイン処理
      *
@@ -33,7 +38,7 @@ class LoginController extends Controller
             $this->validateLoginData($request->except('_token'));
 
             $login = $request->only('login')['login'];
-            $password = $request->only('password')['password'];
+            $password = $request->only('loginPassword')['loginPassword'];
 
             // usernameでログイン
             $user = $this->userService->searchByUsername($login);
@@ -64,12 +69,12 @@ class LoginController extends Controller
                     return \redirect()->route('/');
                 }
             }
-            session()->flash('message', 'invalid credentials');
+            session()->flash('loginErrorMessage', 'invalid credentials');
             session()->flash('alert-class', 'alert-danger');
             return redirect()->back()->withInput();
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            session()->flash('message', 'invalid credentials');
+            session()->flash('loginErrorMessage', 'invalid credentials');
             session()->flash('alert-class', 'alert-danger');
             return redirect()->back()->withInput();
         }
