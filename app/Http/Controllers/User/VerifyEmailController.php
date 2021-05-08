@@ -16,26 +16,26 @@ class VerifyEmailController extends Controller
         $this->userService = $userService;
     }
 
-    public function verifyEmail(string $token = null)
+    public function verify(string $token = null)
     {
         if (\is_null($token)) {
             session()->flash('message', 'Invalid Login attempt');
-            session()->flash('type', 'danger');
-            return redirect()->route('user.login');
+            session()->flash('alert-class', 'alert-danger');
+            return redirect()->route('user.index');
         }
 
         $user = $this->userService->searchByEmailToken($token);
 
         if (\is_null($user)) {
             session()->flash('message', 'Invalid Login attempt');
-            session()->flash('type', 'danger');
-            return redirect()->route('user.login');
+            session()->flash('alert-class', 'alert-danger');
+            return redirect()->route('user.index');
         }
 
         $this->userService->verifyEmail($user->id);
 
         session()->flash('message', 'Your account is activated, you can log in now');
-        session()->flash('type', 'success');
-        return redirect()->route('user.login');
+        session()->flash('alert-class', 'alert-success');
+        return redirect()->route('user.index');
     }
 }
