@@ -38,20 +38,20 @@ class RegisterController extends Controller
      */
     public function signup(Request $request)
     {
+        $validator = $this->validateRegisterData($request->all());
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $this->userService->setUser(
+            firstName: $request->input('firstName'),
+            lastName: $request->input('lastName'),
+            username: $request->input('username'),
+            email: $request->input('email'),
+            password: $request->input('password')
+        );
         try {
-            $validator = $this->validateRegisterData($request->all());
-
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput();
-            }
-
-            $this->userService->setUser(
-                firstName: $request->input('firstName'),
-                lastName: $request->input('lastName'),
-                username: $request->input('username'),
-                email: $request->input('email'),
-                password: $request->input('password')
-            );
             DB::beginTransaction();
             $user = $this->userService->create();
 
@@ -69,7 +69,7 @@ class RegisterController extends Controller
             session()->flash('alert-class', 'alert-success');
             DB::commit();
             return redirect()->route('user.index');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollback();
             \Log::error($e->getMessage());
             session()->flash('message', 'Something went wrong. Could not be registered');

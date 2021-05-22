@@ -60,15 +60,15 @@ class Repository implements IRepository
     }
 
     /**
-     * ユーザ検索・IUsername指定
+     * ユーザ検索・username指定
      *
-     * @param string $IUsername
+     * @param string $username
      *
      * @return IUser|null
      */
-    public function searchByUsername(string $IUsername): IUser|null
+    public function searchByUsername(string $username): IUser|null
     {
-        return $this->user::where('username', $IUsername)->first();
+        return $this->user::where('username', $username)->first();
     }
 
     /**
