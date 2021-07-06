@@ -25,7 +25,6 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('email_verified')->default(EmailVerificationType::NOT_VERIFIED);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('email_verification_token');
-            $table->string('profile_picture')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->boolean('exist')->nullable()->storedAs('case when deleted_at is null then 1 else null end');
