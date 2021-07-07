@@ -15,18 +15,6 @@ class User extends Authenticatable implements IUser
 
     public $timestamps = true;
 
-    public const ID = 'id';
-    public const FIRST_NAME = 'first_name';
-    public const LAST_NAME = 'last_name';
-    public const USERNAME = 'username';
-    public const EMAIL = 'email';
-    public const EMAIL_VERIFIED = 'email_verified';
-    public const EMAIL_VERIFIED_AT = 'email_verified_at';
-    public const EMAIL_VERIFICATION_TOKEN = 'email_verification_token';
-    public const PROFILE_PICTURE = 'profile_picture';
-    public const PASSWORD = 'password';
-    public const REMEMBER_TOKEN = 'remember_token';
-
     /**
      * The attributes that are mass assignable.
      *

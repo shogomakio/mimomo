@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Enums\AlertType;
 use App\Http\Controllers\Controller;
 use App\Mail\User\EmailVerification;
 use App\Service\User\IService;
@@ -56,24 +57,24 @@ class RegisterController extends Controller
             $user = $this->userService->create();
 
             if (is_null($user)) {
-                session()->flash('message', "There was an error. Your account couldn't be created.");
-                session()->flash('alert-class', 'alert-danger');
+                session()->flash(AlertType::MESSAGE(), "There was an error. Your account couldn't be created.");
+                session()->flash(AlertType::ALERT_CLASS(), AlertType::DANGER());
                 return redirect()->route('user.signup');
             }
 
             \Mail::to($user->email)->send(new EmailVerification($user));
             session()->flash(
-                'message',
+                AlertType::MESSAGE(),
                 'Your account was created successfully. Please check your email to activate your account.'
             );
-            session()->flash('alert-class', 'alert-success');
+            session()->flash(AlertType::ALERT_CLASS(), AlertType::SUCCESS());
             DB::commit();
             return redirect()->route('user.index');
         } catch (\Exception $e) {
             DB::rollback();
             \Log::error($e->getMessage());
-            session()->flash('message', 'Something went wrong. Could not be registered');
-            session()->flash('alert-class', 'alert-danger');
+            session()->flash(AlertType::MESSAGE(), 'Something went wrong. Could not be registered');
+            session()->flash(AlertType::ALERT_CLASS(), AlertType::DANGER());
             return redirect()->back()->withInput();
         }
     }
