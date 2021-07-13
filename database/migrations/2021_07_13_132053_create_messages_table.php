@@ -14,17 +14,19 @@ class CreateMessagesTable extends Migration
     public function up()
     {
         Schema::create('messages', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('fk_room_id')->unsigned()->nullable()->index();
-            $table->bigInteger('fk_user_id')->unsigned()->nullable()->index();
+            $table->bigInteger('conversation_id')->unsigned()->nullable()->index();
+            $table->bigInteger('user_id')->unsigned()->nullable()->index();
             $table->text('message')->nullable();
-            $table->softDeletes();
+            $table->boolean('is_read')->nullable(false)->default(false);
+            $table->boolean('is_changed')->nullable(false)->default(false);
+
             $table->timestamps();
+            $table->softDeletes();
 
-            $table->foreign('fk_user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('fk_room_id')->references('id')->on('rooms')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('conversation_id')->references('id')->on('conversations')->onDelete('cascade');
 
-            $table->index(['fk_user_id', 'fk_room_id']);
+            $table->index(['user_id', 'conversation_id']);
         });
     }
 

@@ -14,8 +14,13 @@ class ModelServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(
-            \App\Models\IUser::class,
+            \App\Models\Interfaces\IUser::class,
             \App\Models\User::class
+        );
+
+        $this->app->bind(
+            \App\Models\Interfaces\IRoom::class,
+            \App\Models\Room::class
         );
     }
 

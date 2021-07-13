@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Interfaces\IConversation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Room extends Model implements IRoom
+class Conversation extends Model implements IConversation
 {
     use HasFactory, SoftDeletes;
 
@@ -19,5 +20,13 @@ class Room extends Model implements IRoom
         self::POSTING_ALLOWED
     ];
 
+    protected $casts = [
+        self::HIDDEN => 'boolean',
+        self::POSTING_ALLOWED => 'boolean',
+    ];
 
+    public function setNameAttribute(string $value): void
+    {
+        $this->attributes[self::NAME] = \trim($value);
+    }
 }

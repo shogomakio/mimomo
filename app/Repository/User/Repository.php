@@ -3,8 +3,7 @@
 namespace App\Repository\User;
 
 use App\Enums\EmailVerificationType;
-use App\Models\IUser;
-use App\Models\User;
+use App\Models\Interfaces\IUser;
 use Carbon\Carbon;
 
 class Repository implements IRepository

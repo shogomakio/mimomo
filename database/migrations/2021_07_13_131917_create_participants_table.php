@@ -15,15 +15,15 @@ class CreateParticipantsTable extends Migration
     {
         Schema::create('participants', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('fk_room_id')->unsigned()->nullable(false)->index();
-            $table->bigInteger('fk_user_id')->unsigned()->nullable(false)->index();
+            $table->bigInteger('conversation_id')->unsigned()->nullable(false)->index();
+            $table->bigInteger('user_id')->unsigned()->nullable(false)->index();
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('fk_user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('fk_room_id')->references('id')->on('rooms')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('conversation_id')->references('id')->on('conversations')->onDelete('cascade');
 
-            $table->index(['fk_user_id', 'fk_room_id']);
+            $table->index(['user_id', 'conversation_id']);
         });
     }
 
