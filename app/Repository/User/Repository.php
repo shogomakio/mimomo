@@ -3,7 +3,7 @@
 namespace App\Repository\User;
 
 use App\Enums\EmailVerificationType;
-use App\Models\IUser;
+use App\Models\Interfaces\IUser;
 use Carbon\Carbon;
 
 class Repository implements IRepository
@@ -44,7 +44,7 @@ class Repository implements IRepository
     /**
      * ユーザ新規作成
      *
-     * @return \App\Models\IUser|null
+     * @return IUser|null
      */
     public function create(): ?IUser
     {
@@ -55,7 +55,7 @@ class Repository implements IRepository
             }
             return null;
         } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+            throw $e;
         }
     }
 
@@ -66,9 +66,9 @@ class Repository implements IRepository
      *
      * @return IUser|null
      */
-    public function searchByUsername(string $IUsername): IUser|null
+    public function searchByUsername(string $username): ?IUser
     {
-        return $this->user::where('username', $IUsername)->first();
+        return $this->user::where($this->user::USERNAME, $username)->first();
     }
 
     /**
@@ -78,9 +78,9 @@ class Repository implements IRepository
      *
      * @return IUser|null
      */
-    public function searchByEmail(string $email): IUser|null
+    public function searchByEmail(string $email): ?IUser
     {
-        return $this->user::where('email', $email)->first();
+        return $this->user::where($this->user::EMAIL, $email)->first();
     }
 
     /**
@@ -90,9 +90,9 @@ class Repository implements IRepository
      *
      * @return IUser|null
      */
-    public function searchByEmailToken(string $token): IUser|null
+    public function searchByEmailToken(string $token): ?IUser
     {
-        return $this->user::where('email_verification_token', $token)->first();
+        return $this->user::where($this->user::EMAIL_VERIFICATION_TOKEN, $token)->first();
     }
 
     /**
@@ -104,10 +104,10 @@ class Repository implements IRepository
      */
     public function verifyEmail(int $id): int
     {
-        return $this->user::where('id', $id)->update([
-            'email_verified' => EmailVerificationType::VERIFIED,
-            'email_verified_at' => Carbon::now(),
-            'email_verification_token' => ''
+        return $this->user::where($this->user::ID, $id)->update([
+            $this->user::EMAIL_VERIFIED => EmailVerificationType::VERIFIED,
+            $this->user::EMAIL_VERIFIED_AT => Carbon::now(),
+            $this->user::EMAIL_VERIFICATION_TOKEN => ''
         ]);
     }
 }

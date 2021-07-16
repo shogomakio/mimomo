@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Enums\AlertType;
 use App\Enums\EmailVerificationType;
 use App\Http\Controllers\Controller;
 use App\Service\User\IService;
@@ -69,13 +70,13 @@ class LoginController extends Controller
                     return \redirect()->route('/');
                 }
             }
-            session()->flash('message', 'invalid credentials');
-            session()->flash('alert-class', 'alert-danger');
+            session()->flash(AlertType::MESSAGE(), 'invalid credentials');
+            session()->flash(AlertType::ALERT_CLASS(), AlertType::DANGER());
             return redirect()->back()->withInput();
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            session()->flash('message', 'invalid credentials');
-            session()->flash('alert-class', 'alert-danger');
+            session()->flash(AlertType::MESSAGE(), 'invalid credentials');
+            session()->flash(AlertType::ALERT_CLASS(), AlertType::DANGER());
             return redirect()->back()->withInput();
         }
     }

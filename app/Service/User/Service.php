@@ -2,9 +2,10 @@
 
 namespace App\Service\User;
 
-use App\Models\IUser;
+use App\Models\Interfaces\IUser;
 use App\Repository\User\IRepository;
 use App\Service\User\IService;
+use Exception;
 
 class Service implements IService
 {
@@ -47,10 +48,14 @@ class Service implements IService
      *
      * @return IUser|null
      */
-    public function create(): IUser
+    public function create(): ?IUser
     {
-        $newUser = $this->userRepository->create();
-        return $newUser;
+        try {
+            $newUser = $this->userRepository->create();
+            return $newUser;
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
     /**

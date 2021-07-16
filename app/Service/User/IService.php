@@ -2,7 +2,7 @@
 
 namespace App\Service\User;
 
-use App\Models\IUser;
+use App\Models\Interfaces\IUser;
 
 interface IService
 {

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Interfaces\IUser;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,18 +15,6 @@ class User extends Authenticatable implements IUser
     use HasFactory, Notifiable, SoftDeletes;
 
     public $timestamps = true;
-
-    public const ID = 'id';
-    public const FIRST_NAME = 'first_name';
-    public const LAST_NAME = 'last_name';
-    public const USERNAME = 'username';
-    public const EMAIL = 'email';
-    public const EMAIL_VERIFIED = 'email_verified';
-    public const EMAIL_VERIFIED_AT = 'email_verified_at';
-    public const EMAIL_VERIFICATION_TOKEN = 'email_verification_token';
-    public const PROFILE_PICTURE = 'profile_picture';
-    public const PASSWORD = 'password';
-    public const REMEMBER_TOKEN = 'remember_token';
 
     /**
      * The attributes that are mass assignable.
@@ -63,6 +52,26 @@ class User extends Authenticatable implements IUser
         self::EMAIL_VERIFIED => 'boolean',
         self::EMAIL_VERIFIED_AT => 'datetime',
     ];
+
+    /**
+     * Get the rooms associated with the user
+     *
+     * @return void
+     */
+    public function participant()
+    {
+        return $this->hasMany(Participant::class);
+    }
+
+    /**
+     * Get the rooms associated with the user
+     *
+     * @return void
+     */
+    public function message()
+    {
+        return $this->hasMany(Message::class);
+    }
 
     /**
      * Mutator for User's first name
